@@ -3,44 +3,44 @@
 
 <head>
 
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, user-scalable=no,
-		shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no,
+        shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-	<title>Sensor app</title>
+    <title>Basic Template App</title>
 
-	<style>
-		@import 'ui/css/evothings-app.css';
-	</style>
+    <style>
+        @import 'ui/css/evothings-app.css';
+    </style>
 
-	<script>
-	// Redirect console.log to Evothings Workbench.
-	if (window.hyper && window.hyper.log) { console.log = hyper.log }
-	</script>
+    <script>
+    // Redirect console.log to Evothings Workbench.
+    if (window.hyper && window.hyper.log) { console.log = hyper.log }
+    </script>
     <script src="Chart.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
 </head>
 
 <body ontouchstart=""><!-- ontouchstart="" enables low-delay CSS transitions. -->
 
-	<header>
-		<button class="back" onclick="history.back()">
-			<img src="ui/images/arrow-left.svg" />
-		</button>
+    <header>
+        <button class="back" onclick="history.back()">
+            <img src="ui/images/arrow-left.svg" />
+        </button>
 
-		<img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
+        <img class="logotype" src="ui/images/logo.svg" alt="Evothings" />
 
-		<!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
-	</header>
+        <!--<button class="menu" onclick=""><img src="ui/images/menu.svg" /></button>-->
+    </header>
 
-	<script>
+    <script>
 
 // Create an empty sensor object as a global 
 var sensor = {};
 
 // Where the sensor data is stored
-var mSensorDataURL = 'http://80.69.174.27:8080/streams/';
+var mSensorDataURL = 'http://80.69.174.27:8080/output/';
 
 // A subscriber's key (other keys are available at http://80.69.174.27:8080/streams/)
 sensor.key = "GqXO9z3ae9tODKPPPO2YHxw39By";
@@ -106,7 +106,7 @@ function printData()
                  + '<br /><div id="time">Time  ' + sensor.data.timestamp + '</div>'
                  + '<div id="hum">Humidity ' + sensor.data.h + ' % (rel)</div>'
                  + '<div id="temp">Temperature ' + sensor.data.t + ' celcius</div>'
-                 + '<img style="width: 100%" src="' + sensor.image + '" />'
+                 + '<img src="' + sensor.image + '" />'
             } 
     else 
             {
@@ -120,9 +120,13 @@ function printData()
 
 </script>
 
+
+
 <button onClick="getJSON();">Click to recieve sensor data</button>
 <div id="printHere"></div>
+
 <canvas id="myChart" width="400" height="400"></canvas>
+
 <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
@@ -163,10 +167,10 @@ var myChart = new Chart(ctx, {
 });
 </script>
 
-	<script src="cordova.js"></script>
-	<script src="libs/evothings/evothings.js"></script>
-	<script src="libs/evothings/ui/ui.js"></script>
-	<!-- TODO: Add libraries that you need -->
+    <script src="cordova.js"></script>
+    <script src="libs/evothings/evothings.js"></script>
+    <script src="libs/evothings/ui/ui.js"></script>
+    <!-- TODO: Add libraries that you need -->
 
 </body>
 
