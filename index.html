@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no,
         shrink-to-fit=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Basic Template App</title>
+    <title>Sensor App</title>
 
     <style>
         @import 'ui/css/evothings-app.css';
@@ -106,7 +106,7 @@ function printData()
                  + '<br /><div id="time">Time  ' + sensor.data.timestamp + '</div>'
                  + '<div id="hum">Humidity ' + sensor.data.h + ' % (rel)</div>'
                  + '<div id="temp">Temperature ' + sensor.data.t + ' celcius</div>'
-                 + '<img src="' + sensor.image + '" />'
+                 + '<img style="width: 100%" src="' + sensor.image + '" />'
             } 
     else 
             {
