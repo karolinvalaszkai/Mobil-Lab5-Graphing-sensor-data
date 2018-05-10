@@ -45,6 +45,12 @@ var mSensorDataURL = 'http://80.69.174.27:8080/output/';
 // A subscriber's key (other keys are available at http://80.69.174.27:8080/streams/)
 sensor.key = "GqXO9z3ae9tODKPPPO2YHxw39By";
 
+var sensor2 = {};
+sensor2.key = "dPjyGN0bx0IDgO000D4lI6leJGK";
+
+
+
+
 // A bitmap image describing where the sensor is located
 sensor.image = "https://evothings.com/demos/dome_pics/IMG_1758.JPG";
 
@@ -55,6 +61,8 @@ function getJSON()
     if (window.cordova) 
         {
             console.log('Using Apache Cordova HTTP GET function');
+
+            //For sensor 1
             cordovaHTTP.get(
                 mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&limit=5',
                 function (response) 
@@ -63,6 +71,23 @@ function getJSON()
                             {
                                 sensor.data = JSON.parse(response.data)[0];
                                 sensor.fullData = JSON.parse(response.data);
+                                printData();
+                            }
+                    },
+                function (error) 
+                    {
+                    console.log(JSON.stringify(error));
+                    });
+
+            //For sensor 2
+            cordovaHTTP.get(
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&limit=5',
+                function (response) 
+                    {
+                        if (response) 
+                            {
+                                sensor2.data = JSON.parse(response.data)[0];
+                                sensor2.fullData = JSON.parse(response.data);
                                 printData();
                             }
                     },
@@ -124,44 +149,126 @@ function printData()
                     html = '<h1>Sensor Data</h1>'
 
                     var temp = [];
+                    var np = [];
                     sensor.fullData.forEach(function(item) {
                         temp.push(item.t)
+                        np.push(item.np)
                     });
-                    console.log(temp);
+                    //console.log(temp);
+
+                    var temp2 = [];
+                    var np2 = [];
+                    sensor2.fullData.forEach(function(item) {
+                        temp.push(item.t)
+                        np2.push(item.np)
+                    });
+                    //console.log(temp);
 
                     var time = [];
                     //var ts = new Date(Date.parse(sensor.fullData[Number(row)].timestamp));
                     sensor.fullData.forEach(function(item) {
                         var ts = new Date(Date.parse(item.timestamp));
                         time.push(ts)
+                        console.log(ts.getDay())
                     });
                     console.log(time);
 
                     var ctx = document.getElementById("myChart").getContext('2d');
+                    var ctx2 = document.getElementById("npChart").getContext('2d');
 
 
                     var myChart = new Chart(ctx, {
                         type: 'line',
                         data: {
                             datasets: [{
-                                label: 'First dataset',
-                                data: temp
+                                label: 'First location',
+                                data: temp,
+                                 borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
                             },
                             {
-                                label: 'Second dataset',
-                                data: [36, 35, 27, 28, 32]
+                                label: 'Second location',
+                                data: temp2,
+                                borderColor: 
+                                    ['rgba(40,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(40, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(20, 102, 255, 1)']
+                                    ,
                             }
                             ],
-                            labels: ['January', 'February', 'March', 'April',"maj"]
+                            labels: [1,2,3,4,5]
                         },
                         options: {
+                            title: {
+                                    display: true,
+                                    text: 'Difference in temperature'
+                                },
                             scales: {
                                 yAxes: [{
-                                    stacked: true
+                                    stacked: true,
+                                    ticks: {
+                                            suggestedMin: 20,
+                                            suggestedMax: 30
+                                        }
                                 }]
                             }
                         }
                     });
+
+                    var npChart = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: 'First location',
+                                data: np,
+                                 borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                            },
+                            {
+                                label: 'Second location',
+                                data: np2,
+                                borderColor: 
+                                    ['rgba(40,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(40, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(20, 102, 255, 1)']
+                                    ,
+                            }
+                            ],
+                            labels: [1,2,3,4,5]
+                        },
+                        options: {
+                            title: {
+                                    display: true,
+                                    text: 'Difference in np'
+                                },
+                            scales: {
+                                yAxes: [{
+                                    stacked: true,
+                                    ticks: {
+                                            suggestedMin: 20,
+                                            suggestedMax: 30
+                                        }
+                                }]
+                            }
+                        }
+                    });
+
 
 
                     // var myChart = new Chart(ctx, {
@@ -262,7 +369,11 @@ function printData()
 <div id="printHere"></div>
 
 <canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="npChart" width="400" height="400"></canvas>
 <canvas id="myChartTEST" width="400" height="400"></canvas>
+
+
+
 
 <script>
 var ctx = document.getElementById("myChartTEST").getContext('2d');
