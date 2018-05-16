@@ -36,7 +36,7 @@
 
     <script>
 
-// Create an empty sensor object as a global 
+// Create an empty sensor object as a global
 var sensor = {};
 
 // Where the sensor data is stored
@@ -50,28 +50,28 @@ sensor.image = "https://evothings.com/demos/dome_pics/IMG_1758.JPG";
 
 
 // Function to retrieve data, placing it in a "response" object
-function getJSON() 
+function getJSON(number)
     {
-    if (window.cordova) 
+    if (window.cordova)
         {
             console.log('Using Apache Cordova HTTP GET function');
             cordovaHTTP.get(
-                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&page=1',
-                function (response) 
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-' + number + 'day&page=1',
+                function (response)
                     {
-                        if (response) 
+                        if (response)
                             {
                                 sensor.data = JSON.parse(response.data)[0];
                                 sensor.fullData = JSON.parse(response.data);
                                 printData();
                             }
                     },
-                function (error) 
+                function (error)
                     {
                     console.log(JSON.stringify(error));
                     });
-        }    
-    else 
+        }
+    else
         {
             console.log('Not using Cordova, fallback to AJAX via jquery');
             $.ajax({
@@ -79,13 +79,13 @@ function getJSON()
                     jsonp: "callback",
                     cache: true,
                     dataType: "jsonp",
-                    data: 
+                    data:
                         {
                             page: 1
                         },
-                    success: function(response) 
+                    success: function(response)
                         {
-                            if (response && response[0]) 
+                            if (response && response[0])
                                 {
                                     sensor.data = response[0];
                                     sensor.fullData = response;
@@ -97,9 +97,9 @@ function getJSON()
 }
 
 
-function printData()    
+function printData()
     {
-        if (sensor && sensor.data) 
+        if (sensor && sensor.data)
             {
             // Display the info.
                 html = '<h1>Sensor Data</h1>'
@@ -107,8 +107,8 @@ function printData()
                  + '<div id="hum">Humidity ' + sensor.data.h + ' % (rel)</div>'
                  + '<div id="temp">Temperature ' + sensor.data.t + ' celcius</div>'
                  + '<img style="width: 100%" src="' + sensor.image + '" />'
-            } 
-    else 
+            }
+    else
             {
                 html = '<h1>Sensor Data</h1>'
                  + '<br />Sorry, sensor data not available right now :(</br>'
@@ -122,7 +122,10 @@ function printData()
 
 
 
-<button onClick="getJSON();">Click to recieve sensor data</button>
+
+<button onClick="getJSON(1);">Yesterday</button>
+<button onClick="getJSON(2);">Day before yesterday</button>
+
 <div id="printHere"></div>
 
 <canvas id="myChart" width="400" height="400"></canvas>
