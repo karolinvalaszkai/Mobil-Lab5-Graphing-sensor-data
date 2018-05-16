@@ -64,7 +64,7 @@ function getJSON()
 
             //For sensor 1
             cordovaHTTP.get(
-                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&limit=5',
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
                 function (response) 
                     {
                         if (response) 
@@ -81,7 +81,7 @@ function getJSON()
 
             //For sensor 2
             cordovaHTTP.get(
-                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day&limit=5',
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
                 function (response) 
                     {
                         if (response) 
@@ -158,23 +158,36 @@ function printData()
 
                     var temp2 = [];
                     var np2 = [];
+                    var labelsArray= [];
+                    var foo = [];
+
+                    
+
                     sensor2.fullData.forEach(function(item) {
-                        temp.push(item.t)
+                        temp2.push(item.t)
                         np2.push(item.np)
                     });
                     //console.log(temp);
 
-                    var time = [];
-                    //var ts = new Date(Date.parse(sensor.fullData[Number(row)].timestamp));
-                    sensor.fullData.forEach(function(item) {
-                        var ts = new Date(Date.parse(item.timestamp));
-                        time.push(ts)
-                        console.log(ts.getDay())
-                    });
-                    console.log(time);
+                    // var time = [];
+                    // //var ts = new Date(Date.parse(sensor.fullData[Number(row)].timestamp));
+                    // sensor.fullData.forEach(function(item) {
+                    //     var ts = new Date(Date.parse(item.timestamp));
+                    //     time.push(ts)
+                    //     console.log(ts.getDay())
+                    // });
+                    //console.log(time);
+                    
+                    for (var i = 1; i <= temp.length; i++) {
+                       labelsArray.push(i);
+                    }
+
 
                     var ctx = document.getElementById("myChart").getContext('2d');
                     var ctx2 = document.getElementById("npChart").getContext('2d');
+
+                    //var ctx3 = document.getElementById("chart1").getContext('2d');
+
 
 
                     var myChart = new Chart(ctx, {
@@ -204,7 +217,7 @@ function printData()
                                     ,
                             }
                             ],
-                            labels: [1,2,3,4,5]
+                            labels: labelsArray
                         },
                         options: {
                             title: {
@@ -250,7 +263,7 @@ function printData()
                                     ,
                             }
                             ],
-                            labels: [1,2,3,4,5]
+                            labels: labelsArray
                         },
                         options: {
                             title: {
@@ -268,8 +281,57 @@ function printData()
                             }
                         }
                     });
+                    
 
+                    // var t1 = sensor.fullData[0].t;
+                    // var c1 = sensor.fullData[0].c;
+                    // var l1 = sensor.fullData[0].l;
+                    // var data1 = [t1, c1, l1];
+                    // console.log(data1);
 
+                    // var myBarChart = new Chart(ctx3, {
+                    //     type: 'doughnut',
+                    //     data: {
+                    //             datasets: [{
+                    //                 data: [
+                    //                     1,4,3,7,5
+                    //                 ],
+                    //                 backgroundColor: [
+                    //                     ['rgba(40,99,132,1)',
+                    //                 'rgba(54, 162, 235, 1)',
+                    //                 'rgba(40, 206, 86, 1)',
+                    //                 'rgba(75, 192, 192, 1)',
+                    //                 'rgba(20, 102, 255, 1)'],
+                    //                     orange,
+                    //                     yellow,
+                    //                     green,
+                    //                     blue,
+                    //                 ],
+                    //                 label: 'Dataset 1'
+                    //             }],
+                    //             labels: [
+                    //                 'Red',
+                    //                 'Orange',
+                    //                 'Yellow',
+                    //                 'Green',
+                    //                 'Blue'
+                    //             ]
+                    //         },
+                    //         options: {
+                    //             responsive: true
+                    //         }
+                        
+                        // options: {
+                        //         scales: {
+                        //             xAxes: [{
+                        //                 stacked: true
+                        //             }],
+                        //             yAxes: [{
+                        //                 stacked: true
+                        //             }]
+                        //         }
+                        //     }
+                    //});
 
                     // var myChart = new Chart(ctx, {
                     //     type: 'line',
@@ -370,6 +432,8 @@ function printData()
 
 <canvas id="myChart" width="400" height="400"></canvas>
 <canvas id="npChart" width="400" height="400"></canvas>
+<!-- <canvas id="chart1" width="400" height="400"></canvas> -->
+
 <canvas id="myChartTEST" width="400" height="400"></canvas>
 
 
