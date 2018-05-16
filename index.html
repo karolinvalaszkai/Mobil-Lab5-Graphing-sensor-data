@@ -45,6 +45,12 @@ var mSensorDataURL = 'http://80.69.174.27:8080/output/';
 // A subscriber's key (other keys are available at http://80.69.174.27:8080/streams/)
 sensor.key = "GqXO9z3ae9tODKPPPO2YHxw39By";
 
+var sensor2 = {};
+sensor2.key = "dPjyGN0bx0IDgO000D4lI6leJGK";
+
+
+
+
 // A bitmap image describing where the sensor is located
 sensor.image = "https://evothings.com/demos/dome_pics/IMG_1758.JPG";
 
@@ -55,9 +61,16 @@ function getJSON(number)
     if (window.cordova)
         {
             console.log('Using Apache Cordova HTTP GET function');
+
+            //For sensor 1
             cordovaHTTP.get(
+<<<<<<< HEAD
                 mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-' + number + 'day&page=1',
                 function (response)
+=======
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
+                function (response) 
+>>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
                     {
                         if (response)
                             {
@@ -70,12 +83,34 @@ function getJSON(number)
                     {
                     console.log(JSON.stringify(error));
                     });
+<<<<<<< HEAD
         }
     else
+=======
+
+            //For sensor 2
+            cordovaHTTP.get(
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
+                function (response) 
+                    {
+                        if (response) 
+                            {
+                                sensor2.data = JSON.parse(response.data)[0];
+                                sensor2.fullData = JSON.parse(response.data);
+                                printData();
+                            }
+                    },
+                function (error) 
+                    {
+                    console.log(JSON.stringify(error));
+                    });
+        }    
+    else 
+>>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
         {
             console.log('Not using Cordova, fallback to AJAX via jquery');
             $.ajax({
-                    url: mSensorDataURL + sensor.key + ".json?gt[timestamp]=now-1day",
+                    url: mSensorDataURL + sensor.key + ".json?gt[timestamp]=now-3day&lt[timestamp]=now-2day",
                     jsonp: "callback",
                     cache: true,
                     dataType: "jsonp",
@@ -99,6 +134,7 @@ function getJSON(number)
 
 function printData()
     {
+<<<<<<< HEAD
         if (sensor && sensor.data)
             {
             // Display the info.
@@ -109,10 +145,302 @@ function printData()
                  + '<img style="width: 100%" src="' + sensor.image + '" />'
             }
     else
+=======
+        console.log("print")
+        hyper.log(sensor.fullData)
+
+        if (sensor && sensor.data) 
+            {
+            // Display the info.
+                // html = '<h1>Sensor Data</h1>'
+                //  + '<br /><div id="time">Time  ' + sensor.data.timestamp + '</div>'
+                //  + '<div id="hum">Humidity ' + sensor.data.h + ' % (rel)</div>'
+                //  + '<div id="temp">Temperature ' + sensor.data.t + ' celcius</div>'
+                //  + '<img style="width: 100%" src="' + sensor.image + '" />'
+                    console.log("Temp")
+                    console.log(sensor.fullData[3])
+
+                    //console.log(sensor.fullData[Number(row)].t)
+                    // sensor.fullData.forEach(function(item) {
+               
+                    //     html = '<h1>Sensor Data</h1>'
+                    //     + '<div id="temp">Temperature '+ item.t + ' celcius</div>'
+                         
+                    // });
+
+                    html = '<h1>Sensor Data</h1>'
+
+                    var temp = [];
+                    var np = [];
+                    sensor.fullData.forEach(function(item) {
+                        temp.push(item.t)
+                        np.push(item.np)
+                    });
+                    //console.log(temp);
+
+                    var temp2 = [];
+                    var np2 = [];
+                    var labelsArray= [];
+                    var foo = [];
+
+                    
+
+                    sensor2.fullData.forEach(function(item) {
+                        temp2.push(item.t)
+                        np2.push(item.np)
+                    });
+                    //console.log(temp);
+
+                    // var time = [];
+                    // //var ts = new Date(Date.parse(sensor.fullData[Number(row)].timestamp));
+                    // sensor.fullData.forEach(function(item) {
+                    //     var ts = new Date(Date.parse(item.timestamp));
+                    //     time.push(ts)
+                    //     console.log(ts.getDay())
+                    // });
+                    //console.log(time);
+                    
+                    for (var i = 1; i <= temp.length; i++) {
+                       labelsArray.push(i);
+                    }
+
+
+                    var ctx = document.getElementById("myChart").getContext('2d');
+                    var ctx2 = document.getElementById("npChart").getContext('2d');
+
+                    //var ctx3 = document.getElementById("chart1").getContext('2d');
+
+
+
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: 'First location',
+                                data: temp,
+                                 borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                            },
+                            {
+                                label: 'Second location',
+                                data: temp2,
+                                borderColor: 
+                                    ['rgba(40,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(40, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(20, 102, 255, 1)']
+                                    ,
+                            }
+                            ],
+                            labels: labelsArray
+                        },
+                        options: {
+                            title: {
+                                    display: true,
+                                    text: 'Difference in temperature'
+                                },
+                            scales: {
+                                yAxes: [{
+                                    stacked: true,
+                                    ticks: {
+                                            suggestedMin: 20,
+                                            suggestedMax: 30
+                                        }
+                                }]
+                            }
+                        }
+                    });
+
+                    var npChart = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            datasets: [{
+                                label: 'First location',
+                                data: np,
+                                 borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                            },
+                            {
+                                label: 'Second location',
+                                data: np2,
+                                borderColor: 
+                                    ['rgba(40,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(40, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(20, 102, 255, 1)']
+                                    ,
+                            }
+                            ],
+                            labels: labelsArray
+                        },
+                        options: {
+                            title: {
+                                    display: true,
+                                    text: 'Difference in np'
+                                },
+                            scales: {
+                                yAxes: [{
+                                    stacked: true,
+                                    ticks: {
+                                            suggestedMin: 20,
+                                            suggestedMax: 30
+                                        }
+                                }]
+                            }
+                        }
+                    });
+                    
+
+                    // var t1 = sensor.fullData[0].t;
+                    // var c1 = sensor.fullData[0].c;
+                    // var l1 = sensor.fullData[0].l;
+                    // var data1 = [t1, c1, l1];
+                    // console.log(data1);
+
+                    // var myBarChart = new Chart(ctx3, {
+                    //     type: 'doughnut',
+                    //     data: {
+                    //             datasets: [{
+                    //                 data: [
+                    //                     1,4,3,7,5
+                    //                 ],
+                    //                 backgroundColor: [
+                    //                     ['rgba(40,99,132,1)',
+                    //                 'rgba(54, 162, 235, 1)',
+                    //                 'rgba(40, 206, 86, 1)',
+                    //                 'rgba(75, 192, 192, 1)',
+                    //                 'rgba(20, 102, 255, 1)'],
+                    //                     orange,
+                    //                     yellow,
+                    //                     green,
+                    //                     blue,
+                    //                 ],
+                    //                 label: 'Dataset 1'
+                    //             }],
+                    //             labels: [
+                    //                 'Red',
+                    //                 'Orange',
+                    //                 'Yellow',
+                    //                 'Green',
+                    //                 'Blue'
+                    //             ]
+                    //         },
+                    //         options: {
+                    //             responsive: true
+                    //         }
+                        
+                        // options: {
+                        //         scales: {
+                        //             xAxes: [{
+                        //                 stacked: true
+                        //             }],
+                        //             yAxes: [{
+                        //                 stacked: true
+                        //             }]
+                        //         }
+                        //     }
+                    //});
+
+                    // var myChart = new Chart(ctx, {
+                    //     type: 'line',
+                    //     data: {
+                    //         //labels: ["Red"],
+                    //         datasets: [{
+                    //             label: 'Location 1',
+                    //             data: [{y: temp, t: time}],
+                
+                    //             borderColor: [
+                    //                 'rgba(255,99,132,1)',
+                    //                 'rgba(54, 162, 235, 1)',
+                    //                 'rgba(255, 206, 86, 1)',
+                    //                 'rgba(75, 192, 192, 1)',
+                    //                 'rgba(153, 102, 255, 1)',
+                    //                 'rgba(255, 159, 64, 1)'
+                    //             ],
+                    //             borderWidth: 1
+                    //             },{
+                            
+                    //             label: 'Location 2',
+                    //             data: [{y: [25,26,23,34,24], t: time}],
+                
+                    //             borderColor: [
+                    //                 'rgba(255,99,132,1)',
+                    //                 'rgba(54, 162, 235, 1)',
+                    //                 'rgba(255, 206, 86, 1)',
+                    //                 'rgba(75, 192, 192, 1)',
+                    //                 'rgba(153, 102, 255, 1)',
+                    //                 'rgba(255, 159, 64, 1)'
+                    //             ],
+                    //             borderWidth: 1
+
+                    //         }]
+                    //     },
+                    //     options: {
+                    //         scales: {
+                    //             yAxes: [{
+                    //                 ticks: {
+                    //                     beginAtZero:true
+                    //                 }
+                    //             }]
+
+                    //             xAxes: [{
+                    //                 ticks: {
+                    //                 beginAtZero:true
+                    //             }
+                    //                 type: 'time',
+                    //                 distribution: 'series'
+                                            
+                    //             }]
+                                
+                    //         }
+                    //     }
+                    // });
+
+//                     var myChart = new Chart(ctx, {
+//     type: 'line',
+//     data: [{
+//         x: 10,
+//         y: 20
+//     }, {
+//         x: 15,
+//         y: 10
+//     }],
+//     options: {
+//         scales: {
+//             yAxes: [{
+//                 stacked: true
+//             }]
+//         }
+//     }
+// });
+
+
+
+
+
+
+
+            } 
+    else 
+>>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
             {
                 html = '<h1>Sensor Data</h1>'
                  + '<br />Sorry, sensor data not available right now :(</br>'
-                 + '<img src="' + sensor.image + '" />'
+                 // + '<img src="' + sensor.image + '" />'
             }
     document.getElementById("printHere").innerHTML= html;
     }
@@ -129,8 +457,42 @@ function printData()
 <div id="printHere"></div>
 
 <canvas id="myChart" width="400" height="400"></canvas>
+<canvas id="npChart" width="400" height="400"></canvas>
+<!-- <canvas id="chart1" width="400" height="400"></canvas> -->
+
+<canvas id="myChartTEST" width="400" height="400"></canvas>
+
+
+
 
 <script>
+var ctx = document.getElementById("myChartTEST").getContext('2d');
+let chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        datasets: [{
+            label: 'First dataset',
+            data: [0, 20, 40, 50]
+        },
+        {
+            label: 'Second dataset',
+            data: [0, 20, 30, 50]
+        }
+        ],
+        labels: ['January', 'February', 'March', 'April']
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                stacked: true
+            }]
+        }
+    }
+});
+
+</script>
+
+<!-- <script>
 var ctx = document.getElementById("myChart").getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'line',
@@ -168,7 +530,7 @@ var myChart = new Chart(ctx, {
         }
     }
 });
-</script>
+</script> -->
 
     <script src="cordova.js"></script>
     <script src="libs/evothings/evothings.js"></script>
