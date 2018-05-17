@@ -64,13 +64,10 @@ function getJSON(number)
 
             //For sensor 1
             cordovaHTTP.get(
-<<<<<<< HEAD
+
                 mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-' + number + 'day&page=1',
                 function (response)
-=======
-                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
-                function (response) 
->>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
+
                     {
                         if (response)
                             {
@@ -83,14 +80,11 @@ function getJSON(number)
                     {
                     console.log(JSON.stringify(error));
                     });
-<<<<<<< HEAD
-        }
-    else
-=======
+
 
             //For sensor 2
             cordovaHTTP.get(
-                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-1day',
+                mSensorDataURL + sensor.key + '.json?gt[timestamp]=now-' + number + 'day&page=1',
                 function (response) 
                     {
                         if (response) 
@@ -106,7 +100,6 @@ function getJSON(number)
                     });
         }    
     else 
->>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
         {
             console.log('Not using Cordova, fallback to AJAX via jquery');
             $.ajax({
@@ -134,7 +127,6 @@ function getJSON(number)
 
 function printData()
     {
-<<<<<<< HEAD
         if (sensor && sensor.data)
             {
             // Display the info.
@@ -145,7 +137,7 @@ function printData()
                  + '<img style="width: 100%" src="' + sensor.image + '" />'
             }
     else
-=======
+//=======
         console.log("print")
         hyper.log(sensor.fullData)
 
@@ -436,7 +428,6 @@ function printData()
 
             } 
     else 
->>>>>>> 0e35207f76b0ea87c49caaf2d86ebf42f4b66a00
             {
                 html = '<h1>Sensor Data</h1>'
                  + '<br />Sorry, sensor data not available right now :(</br>'
